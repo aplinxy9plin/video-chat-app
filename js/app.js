@@ -53,10 +53,14 @@ function myjsapp(peerClient) {
             }
         });
 
-        $(document).on('click', '.peeruser', function() {
-            var id = $(this).text()
-            $('#inputPeerUserId').val(id)
-            connectToPeer()
+        $(document).on('click', '.peeruserbtn', function() {
+            var id = $(this).attr('id')
+            console.log(id)
+            var isVideoCall = true;
+            peerClient.makeCall(id, isVideoCall);
+            return false
+            // $('#inputPeerUserId').val(id)
+            // connectToPeer()
         });
 
         Element.prototype.remove = function() {
@@ -168,76 +172,76 @@ function myjsapp(peerClient) {
         },
 
         createChatWindow: function(id) {
-            var toPeerId = id;
-            var panel = $('<div class="panel panel-primary chat-div"><div class="panel-heading"></div>' +
-                '<div class="panel-body"></div><div class="panel-footer">' +
-                '<div class="form-inline"><div class="form-group">' +
-                '</div></div></div></div>')
+            // var toPeerId = id;
+            // var panel = $('<div class="panel panel-primary chat-div"><div class="panel-heading"></div>' +
+            //     '<div class="panel-body"></div><div class="panel-footer">' +
+            //     '<div class="form-inline"><div class="form-group">' +
+            //     '</div></div></div></div>')
 
-            var title = $('<span class="panel-title"></span>').text(toPeerId)
-            var history = $('<ul class="chatHistory"></ul>')
-            var message = $('<input type="text" class="form-control" placeholder="Enter Message">')
-            var sendBtn = $('<button type="button" class="btn btn-outline-primary">Send</button>')
-            var callButton = $('<a class="portfolio-link">');
-            var videoCall = $('<i class="fa fa-video-camera fa-2x call-icon" aria-hidden="true"></i>');
-            var audioCall = $('<i class="fa fa-phone fa-2x call-icon" aria-hidden="true"></i></a>');
+            // var title = $('<span class="panel-title"></span>').text(toPeerId)
+            // var history = $('<ul class="chatHistory"></ul>')
+            // var message = $('<input type="text" class="form-control" placeholder="Enter Message">')
+            // var sendBtn = $('<button type="button" class="btn btn-outline-primary">Send</button>')
+            // var callButton = $('<a class="portfolio-link">');
+            // var videoCall = $('<i class="fa fa-video-camera fa-2x call-icon" aria-hidden="true"></i>');
+            // var audioCall = $('<i class="fa fa-phone fa-2x call-icon" aria-hidden="true"></i></a>');
 
-            callButton.append(audioCall).append(videoCall);
+            // callButton.append(audioCall).append(videoCall);
 
-            chatHistory[toPeerId] = history
-            chatPanel[toPeerId] = panel
+            // chatHistory[toPeerId] = history
+            // chatPanel[toPeerId] = panel
 
-            $('.panel-heading', panel).append(title).append(callButton)
-            $('.panel-body', panel).append('<span class="text-primary">You can now start chatting</span>').append(history)
-            $('.form-group', panel).append(message).append(sendBtn)
+            // $('.panel-heading', panel).append(title).append(callButton)
+            // $('.panel-body', panel).append('<span class="text-primary">You can now start chatting</span>').append(history)
+            // $('.form-group', panel).append(message).append(sendBtn)
 
-            $('.chat-container > div').append(panel);
+            // $('.chat-container > div').append(panel);
 
-            $('.panel-heading', panel).click(function () {
-                var panelBody = $(".panel-body, .panel-footer", $(this).parent());
-                if(panelBody.hasClass("hide")) {
-                    panelBody.removeClass("hide")
-                    panel.removeClass('min')
-                } else {
-                    panel.addClass('min')
-                    panelBody.addClass("hide")
-                }                
-            })
+            // $('.panel-heading', panel).click(function () {
+            //     var panelBody = $(".panel-body, .panel-footer", $(this).parent());
+            //     if(panelBody.hasClass("hide")) {
+            //         panelBody.removeClass("hide")
+            //         panel.removeClass('min')
+            //     } else {
+            //         panel.addClass('min')
+            //         panelBody.addClass("hide")
+            //     }                
+            // })
 
-            message.keypress(function(event) {
-                if (13 == event.which) {
-                    var msgText = $(this).val().trim()
-                    if(msgText) {
-                        peerClient.sendMessage(toPeerId, msgText)
-                        appendToHistory(toPeerId, msgText, true)
-                        $(this).val('')
-                    }
-                }
-            });
+            // message.keypress(function(event) {
+            //     if (13 == event.which) {
+            //         var msgText = $(this).val().trim()
+            //         if(msgText) {
+            //             peerClient.sendMessage(toPeerId, msgText)
+            //             appendToHistory(toPeerId, msgText, true)
+            //             $(this).val('')
+            //         }
+            //     }
+            // });
 
-            sendBtn.click(function(event) {
-                var msgText = message.val().trim()
-                if(msgText) {
-                    peerClient.sendMessage(toPeerId, msgText)
-                    appendToHistory(toPeerId, msgText, true)
-                    message.val('').focus()
-                }
-            });
+            // sendBtn.click(function(event) {
+            //     var msgText = message.val().trim()
+            //     if(msgText) {
+            //         peerClient.sendMessage(toPeerId, msgText)
+            //         appendToHistory(toPeerId, msgText, true)
+            //         message.val('').focus()
+            //     }
+            // });
 
-            audioCall.click(function (event) {
-                // initializeLocalVideo()
-                var isVideoCall = false;
-                peerClient.makeCall(toPeerId, isVideoCall);
-                return false
-            })
+            // audioCall.click(function (event) {
+            //     // initializeLocalVideo()
+            //     var isVideoCall = false;
+            //     peerClient.makeCall(toPeerId, isVideoCall);
+            //     return false
+            // })
 
-            videoCall.click(function (event) {
-                // initializeLocalVideo()
-                var isVideoCall = true;
-                peerClient.makeCall(toPeerId, isVideoCall);
-                return false
-            })
-            // TODO - Hide panels if more than 3
+            // videoCall.click(function (event) {
+            //     // initializeLocalVideo()
+            //     var isVideoCall = true;
+            //     peerClient.makeCall(toPeerId, isVideoCall);
+            //     return false
+            // })
+            // // TODO - Hide panels if more than 3
         },
 
         appendHistory : appendToHistory,
@@ -252,16 +256,16 @@ function myjsapp(peerClient) {
         showVideoCall : function (options) {
             $('#videoCallPanel').modal('show')
             if(options['video'])
-                $('#videoCallPanel .title').text('Video Call')
+                $('#videoCallPanel .title').text('Текущий звонок')
             else
-                $('#videoCallPanel .title').text('Voice Call')
+                $('#videoCallPanel .title').text('Текущий звонок')
         },
         showIncomingCall : function (peerId, options) {
             $('#callConfirmationModal').modal('show')
             if(options['video'])
-                var txt = "Incoming Video call from : " + peerId
+                var txt = "Входящий звонок от : " + peerId
             else
-                var txt = "Incoming Voice call from : " + peerId
+                var txt = "Входящий звонок от : " + peerId
             $('#callConfirmationModal .peer-name').text(txt)
         },
         closeVideoCall : function () {
@@ -296,9 +300,12 @@ function myjsapp(peerClient) {
                 return
             }
             for (var i = 0; i < users.length; i++) {
-                var usr = '<li class="peeruser">'+ users[i] + '</li>'
+                var usr = '<li class="peeruser">'+ users[i] + '<button class="peeruserbtn" id="'+users[i]+'">Видео</button></li>'
                 list.append(usr);
             }
+            // var isVideoCall = true;
+            // // peerClient.makeCall(toPeerId, isVideoCall);
+            // return false
         }
     };
 }
